@@ -13,6 +13,7 @@ export interface IClass extends Document {
   capacity: number;
   waitlistCapacity: number;
   allowDropIn: boolean;
+  userId: mongoose.Types.ObjectId;
 
   // Single class fields
   startAt?: Date;
@@ -75,6 +76,7 @@ const ClassSchema = new Schema<IClass>(
     capacity: { type: Number, required: true },
     waitlistCapacity: { type: Number, default: 0 },
     allowDropIn: { type: Boolean, default: false },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
 
     // Single
     startAt: { type: Date },

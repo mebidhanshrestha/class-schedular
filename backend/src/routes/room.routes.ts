@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { validate } from "../middleware/validate";
+import { protect } from "../middleware/auth.middleware";
 import { roomSchema } from "../utils/validations";
 import * as roomController from "../controllers/room.controller";
 
 const router = Router();
+
+router.use(protect);
 
 router.post("/", validate(roomSchema), roomController.createRoom);
 router.get("/", roomController.getAllRooms);

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { validate } from "../middleware/validate";
+import { protect } from "../middleware/auth.middleware";
 import {
   createSingleClassSchema,
   createRecurringClassSchema,
@@ -8,6 +9,8 @@ import {
 import * as classController from "../controllers/class.controller";
 
 const router = Router();
+
+router.use(protect);
 
 router.post(
   "/single",

@@ -1,15 +1,19 @@
 import Room, { IRoom } from "../models/Room";
 
-export const createRoom = async (payload: any): Promise<IRoom> => {
-  return Room.create(payload);
+export const createRoom = async (payload: any, userId: string): Promise<IRoom> => {
+  return Room.create({ ...payload, userId });
 };
 
 export const getAllRooms = async (
+  userId: string,
   branchId?: string,
   page: number = 1,
   limit: number = 10,
 ): Promise<{ rooms: IRoom[]; total: number }> => {
-  const filter = branchId ? { branchId } : {};
+  const filter: any = { userId };
+  if (branchId) {
+    filter.branchId = branchId;
+  }
   const skip = (page - 1) * limit;
 
   const [rooms, total] = await Promise.all([
@@ -24,14 +28,14 @@ export const getAllRooms = async (
   return { rooms, total };
 };
 
-export const getRoomById = async (id: string): Promise<IRoom | null> => {
-  return Room.findById(id);
+export const getRoomById = async (id: string, userId: string): Promise<IRoom | null> => {
+  return Room.findOne({ _id: id, userId });
 };
 
-export const updateRoom = async (id: string, payload: any): Promise<IRoom | null> => {
-  return Room.findByIdAndUpdate(id, payload, { new: true });
+export const updateRoom = async (id: string, payload: any, userId: string): Promise<IRoom | null> => {
+  return Room.findOneAndUpdate({ _id: id, userId }, payload, { new: true });
 };
 
-export const deleteRoom = async (id: string): Promise<IRoom | null> => {
-  return Room.findByIdAndDelete(id);
+export const deleteRoom = async (id: string, userId: string): Promise<IRoom | null> => {
+  return Room.findOneAndDelete({ _id: id, userId });
 };

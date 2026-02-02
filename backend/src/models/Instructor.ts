@@ -6,6 +6,7 @@ export interface IInstructor extends Document {
   email?: string;
   phone?: string;
   branchIds: mongoose.Types.ObjectId[];
+  userId: mongoose.Types.ObjectId;
 }
 
 const InstructorSchema = new Schema<IInstructor>(
@@ -15,6 +16,7 @@ const InstructorSchema = new Schema<IInstructor>(
     email: { type: String, trim: true },
     phone: { type: String, trim: true },
     branchIds: [{ type: Schema.Types.ObjectId, ref: "Branch", index: true }],
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
   },
   { timestamps: true }
 );

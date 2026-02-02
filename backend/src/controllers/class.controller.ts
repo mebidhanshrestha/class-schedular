@@ -5,7 +5,8 @@ import { ServiceError } from "../services/class.service";
 
 export const createSingleClass = async (req: Request, res: Response) => {
   try {
-    const newClass = await classService.createSingle(req.body);
+    const userId = (req as any).user.id;
+    const newClass = await classService.createSingle(req.body, userId);
 
     return sendSuccess(res, {
       title: "Class created",
@@ -27,7 +28,8 @@ export const createSingleClass = async (req: Request, res: Response) => {
 
 export const createRecurringClass = async (req: Request, res: Response) => {
   try {
-    const newClass = await classService.createRecurring(req.body);
+    const userId = (req as any).user.id;
+    const newClass = await classService.createRecurring(req.body, userId);
 
     return sendSuccess(res, {
       title: "Class created",
@@ -48,8 +50,9 @@ export const createRecurringClass = async (req: Request, res: Response) => {
 };
 
 export const getOccurrences = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
   const query = (res.locals.validated?.query ?? req.query) as any;
-  const result = await classService.getOccurrences(query);
+  const result = await classService.getOccurrences(query, userId);
 
   return sendSuccess(res, {
     title: "Classes fetched",
@@ -65,8 +68,12 @@ export const getOccurrences = async (req: Request, res: Response) => {
 };
 
 export const getClassById = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
   const { id } = req.params;
-  const classDoc = await classService.getById(Array.isArray(id) ? id[0] : id);
+  const classDoc = await classService.getById(
+    Array.isArray(id) ? id[0] : id,
+    userId,
+  );
 
   if (!classDoc) {
     return sendError(res, {

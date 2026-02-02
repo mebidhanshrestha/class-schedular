@@ -52,11 +52,13 @@ const assertNoConflicts = async (params: {
   fromISO: string;
   toISO: string;
   newOccurrences: Occurrence[];
+  userId: string;
 }) => {
-  const { branchId, instructorId, roomId, fromISO, toISO, newOccurrences } =
+  const { branchId, instructorId, roomId, fromISO, toISO, newOccurrences, userId } =
     params;
 
   const candidates = (await Class.find({
+    userId,
     branchId: new mongoose.Types.ObjectId(branchId),
     $or: [
       { instructorId: new mongoose.Types.ObjectId(instructorId) },
@@ -92,7 +94,7 @@ const assertNoConflicts = async (params: {
   }
 };
 
-export const createSingle = async (payload: any): Promise<IClass> => {
+export const createSingle = async (payload: any, userId: string): Promise<IClass> => {
   const { dtstart, until, recurrence, ...clean } = payload;
 
   const fromISO = clean.startAt;
@@ -109,12 +111,13 @@ export const createSingle = async (payload: any): Promise<IClass> => {
     fromISO,
     toISO,
     newOccurrences,
+    userId,
   });
 
-  return Class.create({ ...clean, type: "single" });
+  return Class.create({ ...clean, type: "single", userId });
 };
 
-export const createRecurring = async (payload: any): Promise<IClass> => {
+export const createRecurring = async (payload: any, userId: string): Promise<IClass> => {
   const { startAt, endAt, ...clean } = payload;
 
   const fromISO = clean.dtstart;
@@ -140,15 +143,17 @@ export const createRecurring = async (payload: any): Promise<IClass> => {
     fromISO,
     toISO,
     newOccurrences,
+    userId,
   });
 
-  return Class.create({ ...clean, type: "recurring" });
+  return Class.create({ ...clean, type: "recurring", userId });
 };
 
 export const getOccurrences = async (
   query: OccurrenceQuery,
+  userId: string,
 ): Promise<PaginatedOccurrences> => {
-  const filter: any = {};
+  const filter: any = { userId };
   if (query.branchId) filter.branchId = query.branchId;
   if (query.instructorId) filter.instructorId = query.instructorId;
   if (query.roomId) filter.roomId = query.roomId;
@@ -176,7 +181,7 @@ export const getOccurrences = async (
 
   const total = all.length;
   const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || (total > 0 ? total : 10); 
+  const limit = Number(query.limit) || (total > 0 ? total : 10);
   const skip = (page - 1) * limit;
 
   const paginated = all.slice(skip, skip + limit);
@@ -189,8 +194,8 @@ export const getOccurrences = async (
   };
 };
 
-export const getById = async (id: string): Promise<IClass | null> => {
-  return Class.findById(id)
+export const getById = async (id: string, userId: string): Promise<IClass | null> => {
+  return Class.findOne({ _id: id, userId })
     .populate("branchId")
     .populate("instructorId")
     .populate("roomId");

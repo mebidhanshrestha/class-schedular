@@ -1,31 +1,32 @@
 import Branch, { IBranch } from "../models/Branch";
 
-export const createBranch = async (payload: any): Promise<IBranch> => {
-  return Branch.create(payload);
+export const createBranch = async (payload: any, userId: string): Promise<IBranch> => {
+  return Branch.create({ ...payload, userId });
 };
 
 export const getAllBranches = async (
+  userId: string,
   page: number = 1,
   limit: number = 10,
 ): Promise<{ branches: IBranch[]; total: number }> => {
   const skip = (page - 1) * limit;
 
   const [branches, total] = await Promise.all([
-    Branch.find().sort({ name: 1 }).skip(skip).limit(limit),
-    Branch.countDocuments(),
+    Branch.find({ userId }).sort({ name: 1 }).skip(skip).limit(limit),
+    Branch.countDocuments({ userId }),
   ]);
 
   return { branches, total };
 };
 
-export const getBranchById = async (id: string): Promise<IBranch | null> => {
-  return Branch.findById(id);
+export const getBranchById = async (id: string, userId: string): Promise<IBranch | null> => {
+  return Branch.findOne({ _id: id, userId });
 };
 
-export const updateBranch = async (id: string, payload: any): Promise<IBranch | null> => {
-  return Branch.findByIdAndUpdate(id, payload, { new: true });
+export const updateBranch = async (id: string, payload: any, userId: string): Promise<IBranch | null> => {
+  return Branch.findOneAndUpdate({ _id: id, userId }, payload, { new: true });
 };
 
-export const deleteBranch = async (id: string): Promise<IBranch | null> => {
-  return Branch.findByIdAndDelete(id);
+export const deleteBranch = async (id: string, userId: string): Promise<IBranch | null> => {
+  return Branch.findOneAndDelete({ _id: id, userId });
 };

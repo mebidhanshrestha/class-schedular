@@ -3,7 +3,8 @@ import { sendSuccess, sendError } from "../utils/response";
 import * as roomService from "../services/room.service";
 
 export const createRoom = async (req: Request, res: Response) => {
-  const room = await roomService.createRoom(req.body);
+  const userId = (req as any).user.id;
+  const room = await roomService.createRoom(req.body, userId);
   return sendSuccess(res, {
     title: "Room created",
     message: "Room created successfully",
@@ -12,11 +13,17 @@ export const createRoom = async (req: Request, res: Response) => {
 };
 
 export const getAllRooms = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
   const branchId = req.query.branchId as string;
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
 
-  const { rooms, total } = await roomService.getAllRooms(branchId, page, limit);
+  const { rooms, total } = await roomService.getAllRooms(
+    userId,
+    branchId,
+    page,
+    limit,
+  );
 
   return sendSuccess(res, {
     title: "Rooms fetched",
@@ -32,8 +39,12 @@ export const getAllRooms = async (req: Request, res: Response) => {
 };
 
 export const getRoomById = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
   const { id } = req.params;
-  const room = await roomService.getRoomById(Array.isArray(id) ? id[0] : id);
+  const room = await roomService.getRoomById(
+    Array.isArray(id) ? id[0] : id,
+    userId,
+  );
   if (!room) {
     return sendError(res, {
       title: "Not Found",
@@ -49,10 +60,12 @@ export const getRoomById = async (req: Request, res: Response) => {
 };
 
 export const updateRoom = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
   const { id } = req.params;
   const room = await roomService.updateRoom(
     Array.isArray(id) ? id[0] : id,
     req.body,
+    userId,
   );
   if (!room) {
     return sendError(res, {
@@ -69,8 +82,12 @@ export const updateRoom = async (req: Request, res: Response) => {
 };
 
 export const deleteRoom = async (req: Request, res: Response) => {
+  const userId = (req as any).user.id;
   const { id } = req.params;
-  const room = await roomService.deleteRoom(Array.isArray(id) ? id[0] : id);
+  const room = await roomService.deleteRoom(
+    Array.isArray(id) ? id[0] : id,
+    userId,
+  );
   if (!room) {
     return sendError(res, {
       title: "Not Found",
