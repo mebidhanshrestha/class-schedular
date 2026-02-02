@@ -180,7 +180,7 @@ const InstructorDetailPage: React.FC = () => {
 
         <Grid container spacing={6}>
           {/* Main Content - Biography */}
-          <Grid item xs={12} md={8}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <Box sx={{ mb: 4 }}>
               <Typography
                 variant="h6"
@@ -227,7 +227,7 @@ const InstructorDetailPage: React.FC = () => {
           </Grid>
 
           {/* Sidebar - Contact & Branches */}
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={4}>
               {/* Contact Info */}
               <Box

@@ -84,7 +84,7 @@ const ClassDetailPage: React.FC = () => {
           flexShrink: 0,
         }}
       >
-        {React.cloneElement(icon as React.ReactElement, {
+        {React.cloneElement(icon as React.ReactElement<any>, {
           sx: { fontSize: "1.5rem" },
         })}
       </Box>

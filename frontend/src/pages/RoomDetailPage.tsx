@@ -130,7 +130,7 @@ const RoomDetailPage: React.FC = () => {
         </Box>
 
         <Grid container spacing={5}>
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <Typography
               variant="subtitle1"
               fontWeight="800"

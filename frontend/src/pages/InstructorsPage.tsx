@@ -310,7 +310,7 @@ export function InstructorsPage() {
                 sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1.5 } }}
               />
 
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   label="Email Address"
                   name="email"
@@ -321,7 +321,7 @@ export function InstructorsPage() {
                   sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1.5 } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid size={{ xs: 12, sm: 6 }}>
                 <TextField
                   label="Phone Number"
                   name="phone"

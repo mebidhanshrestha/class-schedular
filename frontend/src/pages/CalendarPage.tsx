@@ -14,8 +14,6 @@ import {
   Skeleton,
   Alert,
   AlertTitle,
-  useTheme,
-  useMediaQuery,
 } from "@mui/material";
 import {
   SearchOutlined as SearchIcon,
@@ -39,8 +37,6 @@ import usePageTitle from "../hooks/usePageTitle";
 
 const CalendarPage: React.FC = () => {
   usePageTitle("Calendar");
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [view, setView] = useState<"day" | "week" | "month">("week");
   const [displayMode, setDisplayMode] = useState<"calendar" | "list">(
     "calendar",

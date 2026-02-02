@@ -427,8 +427,6 @@ const RecurrenceEditor: React.FC<RecurrenceEditorProps> = ({
                 {byWeekday
                   .slice()
                   .sort((a, b) => {
-                    const aVal = a === 0 ? 7 : a;
-                    const bVal = b === 0 ? 7 : b;
                     const aOrder = a === 0 ? -1 : a;
                     const bOrder = b === 0 ? -1 : b;
                     return aOrder - bOrder;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { DateTime, Info } from "luxon";
 import { motion } from "framer-motion";
 import type { Occurrence } from "../types";
